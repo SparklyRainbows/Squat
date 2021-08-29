@@ -1,0 +1,15 @@
+clear all
+p = pong();
+commands = {'downarrow','uparrow'};
+tcpipServer = tcpserver('127.0.0.1', 55000);
+tic
+while toc < 10000000
+   goalPos = 500;
+   ind = (p.paddel2(2) - goalPos > 0) + 1;
+   inputStruct = struct('Key', commands{ind});
+    if tcpipServer.Connected
+        data = structToData(inputStruct);
+        write(tcpipServer, data);
+    end
+    pause(.1)
+end
